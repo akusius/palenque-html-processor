@@ -16,6 +16,8 @@ public class Config {
 
   protected static final String DefaultAuthorId = null;
 
+  protected static final String DefaultRepoBase = "https://github.com/akusius/palenque/blob/master/public_html";
+
   protected static final String DefaultTwitterHashtag = "PalenqueCode";
 
   protected static final String DefaultTwitterVia = "Akusius";

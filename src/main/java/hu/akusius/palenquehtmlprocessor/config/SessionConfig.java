@@ -28,6 +28,8 @@ public class SessionConfig extends Config {
 
   private final String imagePath;
 
+  private final String repoBase;
+
   private final Path sourceDir;
 
   private final Path destDir;
@@ -58,6 +60,10 @@ public class SessionConfig extends Config {
     return imagePath;
   }
 
+  public final String getRepoBase() {
+    return repoBase;
+  }
+
   public final Path getSourceDir() {
     return sourceDir;
   }
@@ -82,13 +88,14 @@ public class SessionConfig extends Config {
     return twitterVia;
   }
 
-  private SessionConfig(boolean website, boolean secure, String domain, String path, String imagePath,
+  private SessionConfig(boolean website, boolean secure, String domain, String path, String imagePath, String repoBase,
           Path sourceDir, Path destDir, boolean noBackup, String twitterHashtag, String twitterVia) {
     this.website = website;
     this.secure = secure;
     this.domain = domain;
     this.path = path;
     this.imagePath = imagePath;
+    this.repoBase = repoBase;
     this.sourceDir = sourceDir;
     this.destDir = destDir;
     this.noBackup = noBackup;
@@ -97,7 +104,7 @@ public class SessionConfig extends Config {
   }
 
   protected SessionConfig(SessionConfig config) {
-    this(config.website, config.secure, config.domain, config.path, config.imagePath,
+    this(config.website, config.secure, config.domain, config.path, config.imagePath, config.repoBase,
             config.sourceDir, config.destDir, config.noBackup, config.twitterHashtag, config.twitterVia);
   }
 
@@ -110,6 +117,7 @@ public class SessionConfig extends Config {
     ap.addArgument("--domain").setDefault(DefaultDomain).help("The domain of the document");
     ap.addArgument("--path").setDefault(DefaultPath).help("The path of the document root within the domain");
     ap.addArgument("--image").metavar("PATH").setDefault(DefaultImagePath).help("Path of the social image");
+    ap.addArgument("--repo-base").metavar("URL").setDefault(DefaultRepoBase).help("The base URL of the repository source link");
     ap.addArgument("--tw-hashtag").metavar("TAG(S)").setDefault(DefaultTwitterHashtag).help("Twitter hashtag(s)");
     ap.addArgument("--tw-via").metavar("VIA").setDefault(DefaultTwitterVia).help("Twitter via");
     ap.addArgument("-r", "--reverse-mode").type(Boolean.class).action(Arguments.storeTrue()).help("Reverse mode (disable the specified processors)");
@@ -133,6 +141,7 @@ public class SessionConfig extends Config {
 
     String path = normalizePath(ns.getString("path"));
     String imagePath = normalizePath(ns.getString("image"));
+    String repoBase = normalizePath(ns.getString("repo_base"));
 
     final Path sourceDir = Paths.get(ns.getString("src"));
     checkPQHDirectory(sourceDir);
@@ -168,7 +177,8 @@ public class SessionConfig extends Config {
       }
     }
 
-    return new SessionConfig(website, secure, domain, path, imagePath, sourceDir, destDir, noBackup, twitterHashtag, twitterVia);
+    return new SessionConfig(website, secure, domain, path, imagePath, repoBase,
+            sourceDir, destDir, noBackup, twitterHashtag, twitterVia);
   }
 
   private static String normalizePath(String path) {
@@ -177,7 +187,7 @@ public class SessionConfig extends Config {
       path = path.substring(1);
     }
     while (path.endsWith("/")) {
-      path = path.substring(0, path.length() - 2);
+      path = path.substring(0, path.length() - 1);
     }
     return path;
   }

@@ -34,10 +34,11 @@ public class Main {
     new Identity(),
     new MetaInformation(),
     new ShareWidgets(),
-    new Links(),
     new Images(),
     new Analytics(),
     new Disqus(),
+    new RepoLink(),
+    new Links(),
     new Toc(),
     new Arranger()
   };
