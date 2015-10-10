@@ -119,10 +119,10 @@ public class Links extends DocProcessor {
         final boolean mailto = href.startsWith("mailto:");
         if (a.hasClass("external") != external) {
           if (external && !mailto) {
-            logger.log(Level.WARNING, "No 'external' class on external link: {0}", href);
+            logger.log(Level.WARNING, "No ''external'' class on external link: {0}", href);
           }
           if (!external) {
-            logger.log(Level.WARNING, "Invalid 'external' class on internal link: {0}", href);
+            logger.log(Level.WARNING, "Invalid ''external'' class on internal link: {0}", href);
           }
         }
         if (external) {

@@ -5,9 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Collector;
-import org.jsoup.select.Elements;
-import org.jsoup.select.QueryParserProxy;
+import org.jsoup.select.*;
 
 /**
  *
@@ -39,14 +37,18 @@ public abstract class DocProcessor extends Processor<Document> {
 
   protected abstract void processDoc(Document doc, ProcessConfig config);
 
-  protected static Elements getElements(Element elem, Evaluator evaluator) {
+  protected static boolean hasElement(Element root, Evaluator evaluator) {
+    return getElements(root, evaluator).size() > 0;
+  }
+
+  protected static Elements getElements(Element root, Evaluator evaluator) {
     return Collector.collect(new org.jsoup.select.Evaluator() {
 
       @Override
       public boolean matches(Element root, Element element) {
         return evaluator.matches(root, element);
       }
-    }, elem);
+    }, root);
   }
 
   protected static Element getTagAttr(Element root, String tagName, String attrKey, String attrValue) {
