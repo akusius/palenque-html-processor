@@ -27,11 +27,11 @@ usage: PalenqueHtmlProcessor [-h] [--src DIR] [--dest DIR] [--no-backup]
                              [--website T/F] [--secure] [--domain DOMAIN]
                              [--path PATH] [--image PATH] [--repo-base URL]
                              [--tw-hashtag TAG(S)] [--tw-via VIA] [-r]
-                             [{Identity,Meta,Share,Images,Analytics,Disqus,RepoLink,Links,Toc}
-                             [{Identity,Meta,Share,Images,Analytics,Disqus,RepoLink,Links,Toc} ...]]
+                             [{Identity,Meta,Analytics,Anchors,Images,Disqus,Share,RepoLink,Links,Toc,Sitemap} 
+                              [{Identity,Meta,Analytics,Anchors,Images,Disqus,Share,RepoLink,Links,Toc,Sitemap} ...]]
 
 positional arguments:
-  {Identity,Meta,Share,Images,Analytics,Disqus,RepoLink,Links,Toc}
+  {Identity,Meta,Analytics,Anchors,Images,Disqus,Share,RepoLink,Links,Toc,Sitemap}
                          The processors to run  (or  to  disable in reverse
                          mode)
 
@@ -76,13 +76,15 @@ The majority of the processors can be enabled/disabled from the command line, wh
 - `Cleaner` (always): removes "\n" text nodes from the end of the body (for proper formatting);
 - `Identity`: injects the canonical link into the head;
 - `Meta`: injects the OpenGraph and Twitter meta tags into the head;
-- `Share`: generates the share widgets into `<div id="share">`;
-- `Images`: puts a link around an image to open it separately;
 - `Analytics`: injects the reference of the `analytics.js` script into the head;
+- `Anchors`: generates an `id` for each paragraph, and inserts an anchor to it;
+- `Images`: puts a link around an image to open it separately;
 - `Disqus`: generates the Disqus fragment into `<div id="comments"`>;
+- `Share`: generates the share widgets into `<div id="share">`;
 - `RepoLink`: creates (or refreshes) `<div id="repo-link">` with the link to the repository source of the file;
 - `Links`: rewrites the front page links (`./` &harr; `index.html`), refreshes the inner link titles and checks the `external` link classes;
 - `Toc`: checks the navigation links and creates a `toc.xml` file with the page hierarchy;
+- `Sitemap`: generates `sitemap.txt` for the site;
 - `Arranger` (always): relocates the `<style>` tag to the end of the head (if exists).
 
 #### HtmlProcessors
