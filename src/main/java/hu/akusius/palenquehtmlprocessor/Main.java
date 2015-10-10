@@ -41,6 +41,7 @@ public class Main {
     new RepoLink(),
     new Links(),
     new Toc(),
+    new Sitemap(),
     new Arranger()
   };
 
