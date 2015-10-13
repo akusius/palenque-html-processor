@@ -1,6 +1,8 @@
 package hu.akusius.palenquehtmlprocessor;
 
 import hu.akusius.palenquehtmlprocessor.config.ProcessConfig;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
@@ -12,6 +14,8 @@ import org.jsoup.select.*;
  * @author Bujdosó Ákos
  */
 public abstract class DocProcessor extends Processor<Document> {
+
+  private static final Logger logger = Logger.getLogger(DocProcessor.class.getName());
 
   @Override
   public Class<Document> getType() {
@@ -37,8 +41,16 @@ public abstract class DocProcessor extends Processor<Document> {
 
   protected abstract void processDoc(Document doc, ProcessConfig config);
 
+  protected static boolean hasElement(Element root, String query) {
+    return hasElement(root, Evaluator.fromQuery(query));
+  }
+
   protected static boolean hasElement(Element root, Evaluator evaluator) {
     return getElements(root, evaluator).size() > 0;
+  }
+
+  protected static Elements getElements(Element root, String query) {
+    return getElements(root, Evaluator.fromQuery(query));
   }
 
   protected static Elements getElements(Element root, Evaluator evaluator) {
@@ -91,10 +103,40 @@ public abstract class DocProcessor extends Processor<Document> {
     e.remove();
   }
 
+  protected static boolean hasScriptFile(Element root, String src) {
+    return hasElement(root, (r, e) -> "script".equals(e.tagName()) && e.attr("src").equals(src));
+  }
+
+  protected static void addScriptFile(Element root, String src) {
+    root.appendElement("script").attr("type", "text/javascript").attr("src", src);
+    root.appendText("\n");
+    logger.log(Level.FINER, "Add script file: {0}", src);
+  }
+
+  protected static void addScriptFileIfNeeded(Element root, String src) {
+    if (!hasScriptFile(root, src)) {
+      addScriptFile(root, src);
+    }
+  }
+
+  protected final static String jquery = "js/lib/jquery.min.js";
+
+  protected static void addJqueryScript(Element root) {
+    addScriptFileIfNeeded(root, jquery);
+  }
+
   @FunctionalInterface
   @SuppressWarnings("PublicInnerClass")
   public interface Evaluator {
 
     boolean matches(Element root, Element element);
+
+    static Evaluator fromEvaluator(final org.jsoup.select.Evaluator evaluator) {
+      return (r, e) -> evaluator.matches(r, e);
+    }
+
+    static Evaluator fromQuery(String query) {
+      return fromEvaluator(QueryParserProxy.parse(query));
+    }
   }
 }

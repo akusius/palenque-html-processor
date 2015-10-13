@@ -23,6 +23,7 @@ public final class EntityReplacer extends HtmlProcessor {
     entities.put('×', "times");
     entities.put('√', "radic");
     entities.put('≈', "asymp");
+    entities.put('≡', "equiv");
   }
 
   @Override

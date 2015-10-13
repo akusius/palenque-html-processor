@@ -47,7 +47,16 @@ public class Toc extends DocProcessor {
 
     Element nav = doc.getElementById("navigation");
     if (nav != null) {
+      if (!hasElement(nav, ".toc")) {
+        nav.prependElement("a").attr("href", "#").attr("accesskey", "t").addClass("toc")
+                .attr("title", "Table of Contents (access key: T)").text("≡");
+        nav.prependText("\n");
+      }
+
       for (Element a : nav.getElementsByTag("a")) {
+        if (a.hasClass("toc")) {
+          continue;
+        }
         Page ref = getPage(a.attr("href"));
         if (a.hasClass("prev")) {
           page.setPrev(ref);
@@ -59,6 +68,14 @@ public class Toc extends DocProcessor {
           throw new AssertionError();
         }
       }
+
+      if (doc.getElementById("toc") == null) {
+        nav.after("\n<div id=\"toc\"></div>");
+      }
+
+      Element head = doc.head();
+      addJqueryScript(head);
+      addScriptFileIfNeeded(head, "js/toc.js");
     }
 
     Page next = page.getNext();
