@@ -83,7 +83,7 @@ The majority of the processors can be enabled/disabled from the command line, wh
 - `Share`: generates the share widgets into `<div id="share">`;
 - `RepoLink`: creates (or refreshes) `<div id="repo-link">` with the link to the repository source of the file;
 - `Links`: rewrites the front page links (`./` &harr; `index.html`), refreshes the inner link titles and checks the `external` link classes;
-- `Toc`: checks the navigation links and creates a `toc.xml` file with the page hierarchy;
+- `Toc`: checks the navigation links, creates the `toc.xml` file with the page hierarchy and injects the elements for the ToC panel;
 - `Sitemap`: generates `sitemap.txt` for the site;
 - `Arranger` (always): relocates the `<style>` tag to the end of the head (if exists).
 
