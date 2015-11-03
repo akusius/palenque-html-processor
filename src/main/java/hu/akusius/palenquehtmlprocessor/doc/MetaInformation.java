@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
  *
@@ -34,7 +35,7 @@ public final class MetaInformation extends DocProcessor {
     }
 
     String url = config.getPageUrl();
-    String image = config.getImageUrl();
+    String image = getImageUrl(doc, config);
 
     Element head = doc.head();
 
@@ -65,5 +66,20 @@ public final class MetaInformation extends DocProcessor {
 
   private static void addMeta(Element head, String key, String value, String content) {
     getOrCreateTagAttr(head, "meta", key, value).attr("content", content);
+  }
+
+  private static String getImageUrl(Document doc, ProcessConfig config) {
+    Elements elements = getElements(doc.body(), "img.social");
+    if (elements.size() > 0) {
+      if (elements.size() > 1) {
+        logger.log(Level.WARNING, "Multiple social media images found.");
+      }
+      String src = elements.get(0).attr("src");
+      logger.log(Level.FINER, "Using individual social media image: {0}", src);
+      return config.canonicalUrl(src);
+    } else {
+      logger.log(Level.FINER, "Using default social media image.");
+      return config.getImageUrl();
+    }
   }
 }
