@@ -47,6 +47,7 @@ public final class MetaInformation extends DocProcessor {
     addMetaProperty(head, "og:title", title);
     addMetaProperty(head, "og:description", description);
     addMetaProperty(head, "og:image", image);
+    addMetaProperty(head, "og:image:url", image);
 
     // Twitter
     addMetaName(head, "twitter:card", "summary");
@@ -54,6 +55,9 @@ public final class MetaInformation extends DocProcessor {
     addMetaName(head, "twitter:title", title);
     addMetaName(head, "twitter:description", description);
     addMetaName(head, "twitter:image", image);
+
+    // Obsolete link image source
+    getOrCreateTagAttr(head, "link", "rel", "image_src").attr("href", image);
   }
 
   private static void addMetaProperty(Element head, String property, String content) {
